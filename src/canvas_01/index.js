@@ -1,12 +1,11 @@
 import { useRef, Suspense } from "react";
 import { Canvas, useLoader } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import testObj from "../objs/tmp/test1.obj";
 
 function Canvas01(props) {
   const canvasRef = useRef(null);
-  const renderer = useRef(null);
 
   return (
     <>
@@ -17,8 +16,8 @@ function Canvas01(props) {
           </>
         }
       >
-        <Canvas ref={canvasRef} gl={renderer}>
-          <InsideCanvas canvas={canvasRef} renderer={renderer} />
+        <Canvas ref={canvasRef}>
+          <InsideCanvas canvas={canvasRef} />
         </Canvas>
       </Suspense>
     </>
@@ -30,13 +29,14 @@ function InsideCanvas(props) {
 
   function onDbclick() {
     console.log("dbclick");
-    controlsRef.current.getAzimuthalAngle();
+    controlsRef.current.reset();
   }
 
   return (
     <>
+      <PerspectiveCamera makeDefault position={[0, 0, 0]} />
       <BodySketch onDbclick={onDbclick} />
-      <ambientLight args={[0xcccccc, 1]} />
+      <ambientLight args={[0x404040, 1]} />
       <directionalLight args={[0x999999, 1]} position={[0, 2, 5]} />
       <directionalLight args={[0x999999, 1]} position={[0, 2, -5]} />
       <OrbitControls
